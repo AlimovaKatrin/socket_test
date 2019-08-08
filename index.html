@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Chat</title>
+</head>
+<body>
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+                <h5 class="my-0 mr-md-auto font-weight-normal">🦖</h5>
+                <nav class="my-2 my-md-0 mr-md-3">
+                  <a class="p-2 text-dark" href="#">Features</a>
+                  <a class="p-2 text-dark" href="#">Enterprise</a>
+                  <a class="p-2 text-dark" href="#">Support</a>
+                  <a class="p-2 text-dark" href="#">Pricing</a>
+                </nav>
+                <a class="btn btn-outline-primary" href="#">Sign up</a>
+              </div>
+              <!-- Основная часть страницы -->
+              <div class="container">
+                    <div class="py-5 text-center">
+                        <h2>Чат программа</h2>
+                        <p class="lead">Укажите ваше имя и начинайте переписку</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- Форма для получения сообщений и имени -->
+                            <h3>Форма сообщений</h3>
+                            <form id="messForm">
+                                <label for="name">Имя</label>
+                                <input type="text" name="name" id="name" placeholder="Введите имя" class="form-control">
+                                <br>
+                                <label for="message">Сообщение</label>
+                                <textarea name="message" id="message" class="form-control" placeholder="Введите сообщение"></textarea>
+                                <br>
+                                <input type="submit" value="Отправить" class="btn btn-danger">
+                            </form>
+                        </div>
+                        <div class="col-6">
+                                <h3>Сообщения</h3>
+                                <!-- Вывод всех сообщений будет здесь -->
+                                <div id="all_mess"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Подключаем jQuery, а также Socket.io -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    $(function(){
+        let socket = io.connect();
+        let $form = $('#messForm');
+        let $textarea = $('#message');
+        let $all_messages = $('#all_mess');
+
+        $form.submit(function(e){
+            e.preventDefault();
+
+            socket.emit('send mess',$textarea.val());
+            $textarea.val('')
+        })
+
+        socket.on('add mess', function(data){
+        $all_messages.append(`<div>${data.msg}</div>`);
+    });
+    });
+    </script>
+</body>
+</html>
