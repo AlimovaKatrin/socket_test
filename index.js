@@ -23,7 +23,7 @@ io.sockets.on('connection',function(socket){
     });
 
     socket.on('send mess', function(data){
-        io.sockets.emit('add mess', {msg: data});
+        io.sockets.emit('add mess', {msg: data.mess, name:data.name,className:data.className});
     });
 
     
